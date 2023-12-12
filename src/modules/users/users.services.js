@@ -18,7 +18,7 @@ class UsersServices {
     static async validateEmail(email) {
         return await Users.findOne({
             where: {
-                email: email
+                email
             }
         })
     }

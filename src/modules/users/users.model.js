@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize')
 
-const { sequelize } = require('../config/database/database')
+const { sequelize } = require('../../config/database/database')
+const { encryptedPassword } = require('../../config/plugins/encriptedPassword.plugin')
 
 const Users = sequelize.define("users", {
     id: {
@@ -17,7 +18,8 @@ const Users = sequelize.define("users", {
 
     email: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true
     },
 
     password: {
@@ -27,13 +29,20 @@ const Users = sequelize.define("users", {
 
     role: {
         type: DataTypes.ENUM('client', 'employee'),
-        allowNull: false
+        allowNull: true,
+        defaultValue: 'client'
     },
 
     status: {
         type: DataTypes.ENUM('available', 'disabled'),
         allowNull: false,
         defaultValue: 'available'
+    }
+}, {
+    hooks: {
+        beforeCreate: async(user) => {
+            user.password = await encryptedPassword(user.password)
+        }
     }
 })
 

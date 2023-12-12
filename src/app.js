@@ -1,17 +1,33 @@
 const express = require('express')
 
-const users = require('./users/users.route')
-const repairs = require('./repairs/repairs.route')
+const router = require('./routes/index')
+const { envs } = require('./config/environments/environments')
+const { globalErrorHandler } = require('./common/errors/error.controller')
+const morgan = require('morgan')
 
-const {requestTime} = require('./common/middlewares')
+const { enableCors } = require('./config/plugins/cors.plugin')
 
 const app = express()
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+const ACCEPTED_ORIGINS = []
 
-app.use(requestTime)
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
-app.use('/api/v1', users, repairs)
+enableCors(app, ACCEPTED_ORIGINS);
+
+if (envs.NODE_ENV === 'development') {
+    app.use(morgan('dev'));
+}
+
+app.use('/api/v1', router)
+
+app.all('*', (req, res, next) => {
+    return next(
+      new AppError(`Can't find ${req.originalUrl} on this server!`, 404)
+    )
+  })
+
+app.use(globalErrorHandler);
 
 module.exports = app

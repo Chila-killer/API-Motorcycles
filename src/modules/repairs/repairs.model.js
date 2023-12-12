@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize')
 
-const { sequelize } = require('../config/database/database')
+const { sequelize } = require('../../config/database/database')
 
 const Repairs = sequelize.define("repairs", {
     id: {
@@ -15,6 +15,17 @@ const Repairs = sequelize.define("repairs", {
         allowNull: false
     },
 
+    motorsNumber: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        field: 'motors_number'
+    },
+    
+    description: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    },
+
     status: {
         type: DataTypes.ENUM('pending', 'completed', 'cancelled'),
         allowNull: false,
@@ -23,7 +34,8 @@ const Repairs = sequelize.define("repairs", {
 
     userId: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        field: 'user_id'
     }
 })
 
