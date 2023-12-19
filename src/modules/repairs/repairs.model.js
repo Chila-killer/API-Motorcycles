@@ -36,6 +36,14 @@ const Repairs = sequelize.define("repairs", {
         allowNull: false,
         // field: 'user_id'
     }
+},
+{
+    indexes: [
+        {
+            unique:true,
+            fields: ['userId']
+        }
+    ]
 })
 
 module.exports = Repairs
