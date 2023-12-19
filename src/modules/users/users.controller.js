@@ -17,7 +17,7 @@ exports.findAll = catchAsync(async (req, res) => {
 exports.create = catchAsync(async (req, res, next) => {
     const { hasError, errorMessages, userData } = validateUser(req.body)
 
-    const emailUser = UserServices.validateEmail(userData.email)
+    const emailUser = await UserServices.validateEmail(userData.email)
 
     if (hasError) {
         return res.status(422).json({
@@ -77,7 +77,6 @@ exports.login = catchAsync(async (req, res, next) => {
 
     return res.status(200).json({
         token,
-        message: "method get - findOne: from users",
         user: {
             id: user.id,
             name: user.name,

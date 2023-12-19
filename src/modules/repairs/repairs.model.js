@@ -1,5 +1,4 @@
 const { DataTypes } = require('sequelize')
-
 const { sequelize } = require('../../config/database/database')
 
 const Repairs = sequelize.define("repairs", {
@@ -16,9 +15,9 @@ const Repairs = sequelize.define("repairs", {
     },
 
     motorsNumber: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING(20),
         allowNull: false,
-        field: 'motors_number'
+        // field: 'motors_number'
     },
     
     description: {
@@ -35,7 +34,7 @@ const Repairs = sequelize.define("repairs", {
     userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        field: 'user_id'
+        // field: 'user_id'
     }
 })
 

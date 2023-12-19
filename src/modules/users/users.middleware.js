@@ -23,7 +23,7 @@ const protect = catchAsync(async(req, res, next) => {
 
     if ( req.headers.authorization && req.headers.authorization.startsWith('Bearer')) 
     {
-        token= req.headers.authorization.split('')[1]   
+        token= req.headers.authorization.split(' ')[1]   
     }
 
     if (!token) {
@@ -32,7 +32,7 @@ const protect = catchAsync(async(req, res, next) => {
 
     const decoded = await promisify(jwt.verify)(token, envs.SECRET_JWT_SEED)
 
-    const user = await UserService.findOne(decoded.id)
+    const user = await UsersServices.findOne(decoded.id)
 
     if (!user) {
         return next(

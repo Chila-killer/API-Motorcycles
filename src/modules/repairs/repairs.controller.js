@@ -1,6 +1,7 @@
 const { catchAsync } = require('../../common/errors/catchAsync')
 const RepairsServices = require('./repairs.services')
 const { validateRepair } = require('./repairs.schema')
+const { date } = require('zod')
 
 exports.findAll = catchAsync(async (req, res) => {
 
@@ -14,9 +15,16 @@ exports.findAll = catchAsync(async (req, res) => {
 })
 
 exports.create = catchAsync(async (req, res) => {
-    const { date, motorsNumber, description, userId } = validateRepair(req.body)
+    const { hasError, errorMessages, repairData } = validateRepair(req.body)
+    
+    if (hasError) {
+        return res.status(422).json({
+            status: 'error',
+            message: errorMessages,
+        })
+    }
 
-    const repair = await RepairsServices.create({ date, motorsNumber, description, userId })
+    const repair = await RepairsServices.create( repairData )
 
     return res.status(201).json({
         message: "method post - create: from repairs",
